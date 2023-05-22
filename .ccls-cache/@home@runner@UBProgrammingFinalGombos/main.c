@@ -17,7 +17,7 @@ int sqr(int term) {
       }
     }
   }
-  return term;
+  return -1;
 }
 
 int main(void) {
@@ -47,7 +47,17 @@ int main(void) {
   printf("%d", term);
 
   root = sqr(term);
-  printf("\n%d\n", root);
+  if (root != -1) {
+    printf("\n%d\n", root);
+  }
+  else {
+    if (term < 0) {
+      printf("\ni sqrt(%d)\n", term);
+    }
+    else {
+      printf("\nsqrt(%d)\n", term);
+    }
+  }
   
   return 0;
 }
