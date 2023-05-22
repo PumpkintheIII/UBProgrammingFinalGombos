@@ -52,6 +52,7 @@ int main(void) {
   }
   else {
     if (term < 0) {
+      term *= -1;
       printf("\ni sqrt(%d)\n", term);
     }
     else {
