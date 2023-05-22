@@ -47,7 +47,7 @@ int main(void) {
   printf("%d", term);
 
   root = sqr(term);
-  printf("\n%d", root);
+  printf("\n%d\n", root);
   
   return 0;
 }
