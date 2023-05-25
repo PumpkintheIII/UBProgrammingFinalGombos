@@ -3,140 +3,182 @@
   Quadratic Formula Calculator
   Maxwell Gombos
 */
-#include <stdio.h> //import input and output functions
+#include <stdio.h>
+#include <string.h>
 
-int sqr(int term) { //define sqr funtion
-  int index, root; //define variables
-  if (term > 0) {
-    //if the term is positive, calculate the whole square root of the term
-    for (index = 1; index <= term; index++) {
-      //find each factor of the term, and check if it is the square root of the term
-      if (term%index == 0) {
-        if (term/index == index) {
-          //if it is the square root of the term, return the number
-          root = index;
-          return root;
-        }
-      }
+struct root {
+  /*
+  Root Struct: Stores the square root of a term
+  inRoot: number inside of square root
+  outRoot: number outside of square root
+  */
+    int inRoot;
+    int outRoot;
+};
+
+struct root sqr(int term) {
+  /*
+  sqr Function:
+  returns root struct
+  finds the square root of the entered term. if it is a partial root, simplify the root instead
+  Variable Guide:
+  index: index variable, temporarily stores a number while it is being checked as the square root of the term
+  output.outRoot: output, number outside of square root when simplified. comes from root struct
+  output.inRoot:  output, number inside of square root when simplified. comes from root struct
+  */
+  struct root output; //call root struct as output
+  int index; //define index variable
+  output.outRoot = 1; //initialize outRoot
+  output.inRoot = term; //initialize inRoot
+  index = 2; //initialize index
+  while ((index * index) <= output.inRoot) {
+    //while index is not greater then the term:
+    //check if index is the square root of the term
+    if (output.inRoot%(index * index) == 0) {
+      //if it is, update inRoot and outRoot
+      output.inRoot = output.inRoot / (index * index);
+      output.outRoot = output.outRoot * index;
+    }
+    else {
+      //if it isn't, increment index by 1
+      index += 1;
     }
   }
-  //if there is no whole square root, return -1
-  return -1;
+  return output; //return updated root struct
 }
 
-int main(void) {
+int gcf(int a, int b) {
   /*
-    Variable Guide:
-
-    Equation Part Guide:
-    -b ± sqrt(b^2 - 4ac) / 2a
-    part1: -b
-    part2: b^2
-    part3: -4ac
-    part4: 2a
-    term: b^2 - 4ac
+  gcf Function:
+  finds the greatest common factor of two numbers
+  it does this by checking if b is equal to 0
+  if it is, return a as gcf
+  if not, set b to the remainder of a/b and check again
+  Variable Guide:
+  a: first number to find the gcf of
+  b: second number to find the gcf of
   */
-  int a, b, c, term, root, index; //define variables as integer
-  int numeratorA, numeratorB, denominatorA, denominatorB, outA, outB;  //define variables as integer
-  term = 0; //intitialize term variable
-  outA = 0;
-  outB = 0;
-
-  printf("a: "); //ask user for input
-  scanf("%d", &a); //accept user input
-  printf("b: "); //ask user for input
-  scanf("%d", &b); //accept user input
-  printf("c: "); //ask user for input
-  scanf("%d", &c); //accept user input
-
-  //find the term of the square root (b^2-4ac)
-  term = b * b;
-  term += (-4 * a) * c;
-
-  root = sqr(term); //call the sqr function
-  if (root != -1) {
-    //if the square root function found a whole root, calculate the quadratic formula
-    numeratorA = (b * -1) + root; //find the numberator of -b + sqrt(b^2 - 4ac)
-    numeratorB = (b * -1) - root; //find the numberator of -b - sqrt(b^2 - 4ac)
-    denominatorA = (2 * a); //find the denominator
-    denominatorB = (2 * a); //find the denominator
-    if (numeratorA > denominatorA) {
-      if (numeratorA%denominatorA == 0) {
-        numeratorA = numeratorA/denominatorA;
-        denominatorA = 1;
-      }
-      else {
-        while (numeratorA > denominatorA) {
-          numeratorA -= denominatorA;
-          outA += 1;
-        }
-      }
-    }
-    else {
-      for (index = 1; index < denominatorA; index++) {
-        if (denominatorA%index == 0) {
-          if (numeratorA%index == 0) {
-            numeratorA = numeratorA/index;
-            denominatorA = denominatorA/index;
-          }
-        }
-      }
-    }
-    if (numeratorB > denominatorB) {
-      if (numeratorB%denominatorB == 0) {
-        numeratorB = numeratorB/denominatorB;
-        denominatorB = 1;
-      }
-      else {
-        while (numeratorB > denominatorB) {
-          numeratorB -= denominatorB;
-          outB += 1;
-        }
-      }
-    }
-    else {
-      for (index = 1; index < denominatorB; index++) {
-        if (denominatorB%index == 0) {
-          if (numeratorB%index == 0) {
-            numeratorB = numeratorB/index;
-            denominatorB = denominatorB/index;
-          }
-        }
-      }
-    }
-    if (outA != 0 && outB == 0) {
-      printf("\n%d %d/%d, %d/%d\n", outA, numeratorA, denominatorA, numeratorB, denominatorB); //print the output
-    }
-    else if (outA == 0 && outB != 0) {
-      printf("\n%d/%d, %d %d/%d\n", numeratorA, denominatorA, outB, numeratorB, denominatorB); //print the output
-    }
-    else if (outA != 0 && outB != 0) {
-      printf("\n%d %d/%d, %d %d/%d\n", outA, numeratorA, denominatorA, outB, numeratorB, denominatorB); //print the output
-    }
-    else {
-      printf("\n%d/%d, %d/%d\n", numeratorA, denominatorA, numeratorB, denominatorB); //print the output
-    }
+  if (b == 0) {
+    //if b is equal ot 0, gcf is equal to a
+    return a;
   }
   else {
-    //if the sqr function did not find a whole root, check if it is an imaginary number or parial root:
-    if (term < 0) {
-      //if it is an imaginary number, find the output of the formula using imaginary numbers to simplify the root
-      term *= -1; //update term variable
-      numeratorA = (b * -1); //find the numberator of -b + sqrt(b^2 - 4ac)
-      numeratorB = (b * -1); //find the numberator of -b - sqrt(b^2 - 4ac)
-      denominatorA = (2 * a); //find the denominator
-      denominatorB = (2 * a); //find the denominator
-      printf("\n%d + i sqrt(%d)/%d, %d - i sqrt(%d)/%d\n", numeratorA, term, denominatorA, numeratorB, term, denominatorB); //print the output
-    }
-    else {
-      //if it is a partial root, find the output of the formula using partial root
-      numeratorA = (b * -1); //find the numberator of -b + sqrt(b^2 - 4ac)
-      numeratorB = (b * -1); //find the numberator of -b - sqrt(b^2 - 4ac)
-      denominatorA = (2 * a); //find the denominator
-      denominatorB = (2 * a); //find the denominator
-      printf("\n%d + sqrt(%d)/%d, %d - sqrt(%d)/%d\n", numeratorA, term, denominatorA, numeratorB, term, denominatorB); //print the output
-    }
+    //if be is not equal to 0
+    //update b variable
+    //call gcf function again
+    return gcf(b, a%b);
   }
+}
+
+struct fraction {
+  /*
+  faction Struct:
+  stores integer numerator and denominator of the two fractions
+  Variable Guide:
+  numeratorA: numerator of first output fraction
+  numeratorB: numerator of second output fraction
+  denominatorA: denominator of first output fraction
+  denominatorB: denominator of secodn output fraction
+  */
+  int numeratorA;
+  int denominatorA;
+  int numeratorB;
+  int denominatorB;
+};
+
+int main(void) {
+    /*
+    Quadratic Equation:
+    ax^2 + bx + c
+    Quadratic Formula:
+    -b ± sqr(b^2 - 4ac)
+    -------------------
+            2a
+    Variable Guide:
+    a: a variable in quadratic equation
+    b: b variable in quadratic equation
+    c: c variable in quadratic equation
+    isTermNegative: stores if the term of the square root is negative
+    factor: stores gcf of numerator and denominator of the output fraction, used when simplifying fractions
+    term: term of the square root in quadratic formula (b^2-4ac)
+    fraction: struct used to store numerator and denominator of output
+    root: struct used to store the output of the square root
+    */
+  int a, b, c, isTermNegative, factor, term; //define variables as integers
+  struct fraction output; //initialize fraction struct as output
+  struct root root; //initialize root struct as root
+  isTermNegative = 0; //initialize isTermNegative as 0 (term is positive)
+
+  //get a, b, and c variables
+  printf("a: ");
+  scanf("%d", &a);
+  printf("b: ");
+  scanf("%d", &b);
+  printf("c: ");
+  scanf("%d", &c);
+
+  printf("%dx^2 + %dx + %d\n", a, b, c); //print quadratic equation
+  printf("-(%d) +/- sqrt((%d)^2 - 4(%d)(%d))\n--------------------------------\n2(%d)\n", b, b, a, c, a); //print quadratic formula
+
+  //calculate square root term (b^2-4ac)
+  term = b * b;
+  term = term - ((4 * a) * c);
+
+   if (term > 0) {
+     //if the term is positive:
+     //call the sqr function to find the square root of the term
+     root = sqr(term);
+   }
+   if (term < 0) {
+     //if the term is negative:
+     term *= -1; //convert to positive
+     isTermNegative = 1; //update isTermNegative variable to 1 (term is negative)
+     root = sqr(term); //call sqr function to find the square root of the term
+     printf("%di sqr(%d)\n", root.outRoot, root.inRoot);
+   }
   
-  return 0;
+   if (root.inRoot == 1 && isTermNegative == 0) {
+     /*
+     If the term is positive and a whole root:
+     Split the quadratic formula into two outputs (-b + sqr(b^2-4ac) and -b - sqr(b^2-4ac))
+     find the numerator for each
+     find the denominator for each
+     simplify the two fractions
+     output for the user
+     */
+     output.numeratorA = (-1 * b) + root.outRoot; //find numeratorA
+     output.denominatorA = 2 * a; //find denominatorA
+     output.numeratorB = (-1 * b) - root.outRoot; //find numeratorB
+     output.denominatorB = 2 * a; //find denominatorB
+     factor = gcf(output.numeratorA, output.denominatorA); //find the gcf of the numerator and denominator for the first output fraction
+     //simplify first output fraction
+     output.numeratorA /= factor;
+     output.denominatorA /= factor;
+     factor = gcf(output.numeratorB, output.denominatorB); //find the gcf of the numerator and denominator for the second output fraction
+     //simplify second output fraction
+     output.numeratorB /= factor;
+     output.denominatorB /= factor;
+     printf("%d/%d, %d/%d\n", output.numeratorA, output.denominatorA, output.numeratorB, output.denominatorB); //print formula output
+   }
+   else if (root.inRoot != 1 && isTermNegative == 0) {
+     output.denominatorA = 2 * a; //find denominatorA
+     output.denominatorB = 2 * a; //find denominatorB
+     output.numeratorA = -1 * b; //find numeratorA
+     output.numeratorB = -1 * b; //find numeratorB
+     printf("%d + %d sqrt(%d)/%d, %d - %d sqrt(%d)/%d\n", output.numeratorA, root.outRoot, root.inRoot, output.denominatorA, output.numeratorB, root.outRoot, root.inRoot, output.denominatorB); //print formula output
+   }
+   else if (root.inRoot == 1 && isTermNegative == 1) {
+     output.denominatorA = 2 * a; //find denominatorA
+     output.denominatorB = 2 * a; //find denominatorB
+     output.numeratorA = -1 * b; //find numeratorB
+     output.numeratorB = -1 * b; //find denominatorB
+     printf("%d + %di/%d, %d - %di/%d\n", output.numeratorA, root.outRoot, output.denominatorA, output.numeratorB, root.outRoot, output.denominatorB); //print formula output
+   }
+   else if (root.inRoot != 1 && isTermNegative == 1) {
+     output.denominatorA = 2 * a; //find denominatorA
+     output.denominatorB = 2 * a; //find denominatorB
+     output.numeratorA = -1 * b; //find numeratorA
+     output.numeratorB = -1 * b; //find numeratorB
+     printf("%d + %di sqrt(%d)/%d, %d - %di sqrt(%d)/%d\n", output.numeratorA, root.outRoot, root.inRoot, output.denominatorA, output.numeratorB, root.outRoot, root.inRoot, output.denominatorB); //print output of formula
+  }
 }
