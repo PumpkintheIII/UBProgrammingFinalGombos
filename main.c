@@ -3,8 +3,8 @@
   Quadratic Formula Calculator
   Maxwell Gombos
 */
-#include <stdio.h>
-#include <string.h>
+#include <stdio.h> //import input and output functions
+#include <string.h> //define main function
 
 struct root {
   /*
@@ -31,8 +31,9 @@ struct root sqr(int term) {
   output.outRoot = 1; //initialize outRoot
   output.inRoot = term; //initialize inRoot
   index = 2; //initialize index
+  
   while ((index * index) <= output.inRoot) {
-    //while index is not greater then the term:
+    //while index squared is not greater then the term:
     //check if index is the square root of the term
     if (output.inRoot%(index * index) == 0) {
       //if it is, update inRoot and outRoot
@@ -109,6 +110,8 @@ int main(void) {
   struct root root; //initialize root struct as root
   isTermNegative = 0; //initialize isTermNegative as 0 (term is positive)
 
+  printf("This program allows you to enter the three coefficients of a quadratic equation. It will then enter those into the quadratic formula to find the roots of the quadratic equation.\nQuadratic Equation:\n\ty = ax^2 + bx + c\nQuadratic Formula:\n\t-b +/- sqrt(b^2 - 4ac)\n\t----------------------\n\t          2a\n\n");
+
   //get a, b, and c variables
   printf("a: ");
   scanf("%d", &a);
@@ -117,8 +120,8 @@ int main(void) {
   printf("c: ");
   scanf("%d", &c);
 
-  printf("%dx^2 + %dx + %d\n", a, b, c); //print quadratic equation
-  printf("-(%d) +/- sqrt((%d)^2 - 4(%d)(%d))\n--------------------------------\n2(%d)\n", b, b, a, c, a); //print quadratic formula
+  printf("\nYour Quadratic Equation:\ny = %dx^2 + %dx + %d\n", a, b, c); //print quadratic equation
+  printf("Your Quadratic Formula:\n-(%d) +/- sqrt((%d)^2 - 4(%d)(%d))\n-----------------------------------\n               2(%d)\n", b, b, a, c, a); //print quadratic formula
 
   //calculate square root term (b^2-4ac)
   term = b * b;
@@ -134,7 +137,6 @@ int main(void) {
      term *= -1; //convert to positive
      isTermNegative = 1; //update isTermNegative variable to 1 (term is negative)
      root = sqr(term); //call sqr function to find the square root of the term
-     printf("%di sqr(%d)\n", root.outRoot, root.inRoot);
    }
   
    if (root.inRoot == 1 && isTermNegative == 0) {
@@ -158,27 +160,49 @@ int main(void) {
      //simplify second output fraction
      output.numeratorB /= factor;
      output.denominatorB /= factor;
-     printf("%d/%d, %d/%d\n", output.numeratorA, output.denominatorA, output.numeratorB, output.denominatorB); //print formula output
+     printf("\nQuadratic Equation Roots:\n%d/%d, %d/%d\n", output.numeratorA, output.denominatorA, output.numeratorB, output.denominatorB); //print formula output
    }
    else if (root.inRoot != 1 && isTermNegative == 0) {
+     /*
+     If the term is positive and a partial root:
+     Split the quadratic formula into two outputs (-b + sqr(b^2-4ac) and -b - sqr(b^2-4ac))
+     find the numerator for each
+     find the denominator for each
+     output for the user
+     */
      output.denominatorA = 2 * a; //find denominatorA
      output.denominatorB = 2 * a; //find denominatorB
      output.numeratorA = -1 * b; //find numeratorA
      output.numeratorB = -1 * b; //find numeratorB
-     printf("%d + %d sqrt(%d)/%d, %d - %d sqrt(%d)/%d\n", output.numeratorA, root.outRoot, root.inRoot, output.denominatorA, output.numeratorB, root.outRoot, root.inRoot, output.denominatorB); //print formula output
+     printf("\nQuadratic Equation Roots:\n%d + %d sqrt(%d)/%d, %d - %d sqrt(%d)/%d\n", output.numeratorA, root.outRoot, root.inRoot, output.denominatorA, output.numeratorB, root.outRoot, root.inRoot, output.denominatorB); //print formula output
    }
    else if (root.inRoot == 1 && isTermNegative == 1) {
+     /*
+     If the term is negative and a whole root:
+     Split the quadratic formula into two outputs (-b + sqr(b^2-4ac) and -b - sqr(b^2-4ac))
+     find the numerator for each
+     find the denominator for each
+     output for the user
+     */
      output.denominatorA = 2 * a; //find denominatorA
      output.denominatorB = 2 * a; //find denominatorB
      output.numeratorA = -1 * b; //find numeratorB
      output.numeratorB = -1 * b; //find denominatorB
-     printf("%d + %di/%d, %d - %di/%d\n", output.numeratorA, root.outRoot, output.denominatorA, output.numeratorB, root.outRoot, output.denominatorB); //print formula output
+     printf("\nQuadratic Equation Roots:\n%d + %di/%d, %d - %di/%d\n", output.numeratorA, root.outRoot, output.denominatorA, output.numeratorB, root.outRoot, output.denominatorB); //print formula output
    }
    else if (root.inRoot != 1 && isTermNegative == 1) {
+     /*
+     If the term is negative and a partial root:
+     Split the quadratic formula into two outputs (-b + sqr(b^2-4ac) and -b - sqr(b^2-4ac))
+     find the numerator for each
+     find the denominator for each
+     output for the user
+     */
      output.denominatorA = 2 * a; //find denominatorA
      output.denominatorB = 2 * a; //find denominatorB
      output.numeratorA = -1 * b; //find numeratorA
      output.numeratorB = -1 * b; //find numeratorB
-     printf("%d + %di sqrt(%d)/%d, %d - %di sqrt(%d)/%d\n", output.numeratorA, root.outRoot, root.inRoot, output.denominatorA, output.numeratorB, root.outRoot, root.inRoot, output.denominatorB); //print output of formula
+     printf("\nQuadratic Equation Roots:\n%d + %di sqrt(%d)/%d, %d - %di sqrt(%d)/%d\n", output.numeratorA, root.outRoot, root.inRoot, output.denominatorA, output.numeratorB, root.outRoot, root.inRoot, output.denominatorB); //print output of formula
   }
+  printf("\nProgram Complete!\n"); //output statement
 }
