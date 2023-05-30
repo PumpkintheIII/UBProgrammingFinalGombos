@@ -48,26 +48,26 @@ struct root sqr(int term) {
   return output; //return updated root struct
 }
 
-int gcf(int a, int b) {
+int gcf(int num1, int num2) {
   /*
   gcf Function:
   finds the greatest common factor of two numbers
-  it does this by checking if b is equal to 0
-  if it is, return a as gcf
-  if not, set b to the remainder of a/b and check again
+  it does this by checking if num2 is equal to 0
+  if it is, return num1 as gcf
+  if not, set num2 to the remainder of num1/num2 and check again
   Variable Guide:
-  a: first number to find the gcf of
-  b: second number to find the gcf of
+  num1: first number to find the gcf of
+  num2: second number to find the gcf of
   */
-  if (b == 0) {
-    //if b is equal ot 0, gcf is equal to a
-    return a;
+  if (num2 == 0) {
+    //if num2 is equal ot 0, gcf is equal to num1
+    return num1;
   }
   else {
     //if be is not equal to 0
-    //update b variable
+    //update num2 variable
     //call gcf function again
-    return gcf(b, a%b);
+    return gcf(num2, num1%num2);
   }
 }
 
@@ -110,7 +110,7 @@ int main(void) {
   struct root root; //initialize root struct as root
   isTermNegative = 0; //initialize isTermNegative as 0 (term is positive)
 
-  printf("This program allows you to enter the three coefficients of a quadratic equation. It will then enter those into the quadratic formula to find the roots of the quadratic equation.\nQuadratic Equation:\n\ty = ax^2 + bx + c\nQuadratic Formula:\n\t-b +/- sqrt(b^2 - 4ac)\n\t----------------------\n\t          2a\n\n");
+  printf("This program allows you to enter the three coefficients of a quadratic equation. It will then enter those into the quadratic formula to find the roots of the quadratic equation.\nQuadratic Equation:\n\ty = ax^2 + bx + c\nQuadratic Formula:\n\t-b +/- sqrt(b^2 - 4ac)\n\t----------------------\n\t          2a\n\n"); //instructions
 
   //get a, b, and c variables
   printf("a: ");
@@ -152,6 +152,7 @@ int main(void) {
      output.denominatorA = 2 * a; //find denominatorA
      output.numeratorB = (-1 * b) - root.outRoot; //find numeratorB
      output.denominatorB = 2 * a; //find denominatorB
+     
      factor = gcf(output.numeratorA, output.denominatorA); //find the gcf of the numerator and denominator for the first output fraction
      //simplify first output fraction
      output.numeratorA /= factor;
@@ -160,6 +161,7 @@ int main(void) {
      //simplify second output fraction
      output.numeratorB /= factor;
      output.denominatorB /= factor;
+     
      printf("\nQuadratic Equation Roots:\n%d/%d, %d/%d\n", output.numeratorA, output.denominatorA, output.numeratorB, output.denominatorB); //print formula output
    }
    else if (root.inRoot != 1 && isTermNegative == 0) {
@@ -186,8 +188,8 @@ int main(void) {
      */
      output.denominatorA = 2 * a; //find denominatorA
      output.denominatorB = 2 * a; //find denominatorB
-     output.numeratorA = -1 * b; //find numeratorB
-     output.numeratorB = -1 * b; //find denominatorB
+     output.numeratorA = -1 * b; //find numeratorA
+     output.numeratorB = -1 * b; //find numeratorB
      printf("\nQuadratic Equation Roots:\n%d + %di/%d, %d - %di/%d\n", output.numeratorA, root.outRoot, output.denominatorA, output.numeratorB, root.outRoot, output.denominatorB); //print formula output
    }
    else if (root.inRoot != 1 && isTermNegative == 1) {
